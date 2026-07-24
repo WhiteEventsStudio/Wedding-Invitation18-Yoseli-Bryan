@@ -646,32 +646,26 @@
             document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
         }
 
-        setInterval(updateCountdown, 1000);
+        // Ejecutar inmediatamente y actualizar cada segundo
         updateCountdown();
+        setInterval(updateCountdown, 1000);
 
+        // Funciones auxiliares de la invitación (pantalla de bienvenida, modales, etc.)
         function startInvitation() {
             const welcomeScreen = document.getElementById('welcome-screen');
             welcomeScreen.style.opacity = '0';
             setTimeout(() => {
                 welcomeScreen.style.display = 'none';
             }, 1000);
-
-            if (music) {
-                music.play().catch(e => console.log("Audio play prevented:", e));
-                document.getElementById('music-player').style.display = 'flex';
-            }
-
-            const dateEl = document.getElementById('animated-date');
-            if (dateEl) dateEl.classList.add('start-typing');
-        }
-
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
-                playPauseBtn.innerText = "❚❚";
-            } else {
-                music.pause();
-                playPauseBtn.innerText = "▶";
+            
+            // Iniciar animación de fecha y música si aplica
+            const dateAnim = document.getElementById('animated-date');
+            if(dateAnim) dateAnim.classList.add('start-typing');
+            
+            if(music) {
+                music.play().catch(e => console.log("Audio autoplay prevented"));
+                const player = document.getElementById('music-player');
+                if(player) player.style.display = 'flex';
             }
         }
 
@@ -681,18 +675,32 @@
         function closeCalendarModal() {
             document.getElementById('calendarModalOverlay').classList.remove('show');
         }
+
         function openRsvpModal() {
             document.getElementById('rsvpModalOverlay').classList.add('show');
         }
         function closeRsvpModal() {
             document.getElementById('rsvpModalOverlay').classList.remove('show');
         }
-        function submitRSVP(respuesta) {
+
+        function submitRSVP(response) {
             closeRsvpModal();
-            if (respuesta === 'Sí') {
-                document.getElementById('btn-principal-rsvp').style.display = 'none';
-                document.getElementById('msg-pase-exito').style.display = 'block';
-                document.getElementById('msg-pase-decline').style.display = 'block';
+            document.getElementById('btn-principal-rsvp').style.display = 'none';
+            document.getElementById('msg-pase-exito').style.display = 'block';
+            if(response === 'No') {
+                const declineBtn = document.getElementById('msg-pase-decline');
+                declineBtn.innerText = "Asistencia: No";
+                declineBtn.style.display = 'block';
+            }
+        }
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                playPauseBtn.innerText = "❚❚";
+            } else {
+                music.pause();
+                playPauseBtn.innerText = "▶";
             }
         }
     </script>
